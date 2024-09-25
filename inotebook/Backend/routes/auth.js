@@ -25,7 +25,7 @@ router.post('/createuser', [
     if (user) {
         return res.status(400).json({ error: "Sorry, A User with this Email already exists." })
     }
-    
+
     const salt = await bcrypt.genSalt(10);
     const secPass = await bcrypt.hash(req.body.password, salt);
     //Create a New User
@@ -44,7 +44,52 @@ router.post('/createuser', [
     const authtoken = jwt.sign(data, JWT_SECRET);
     console.log(authtoken);
 
-    res.json({authtoken});
+    return res.json({ authtoken });
 });
+
+
+//Authenticate a User using : POST "/api/auth/login". No login required
+router.post('/createuser', [
+    body('email', 'Enter a Valid Email').isEmail(),
+    body('password', 'Password cannot be black').exists()
+], async (req, res) => {
+
+    // if there are errors, return Bad request and the errors 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() }); // Corrected the parentheses
+    }
+
+    const { email, password } = req.body;
+    try {
+        let user = User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ errors: "Please try to login with correct credentials" })
+        }
+
+        const passwordCompare = bcrypt.compare(password, user.password);
+        if (!passwordCompare) {
+            return res.status(400).json({
+                errors: "Please try to login with correct credentials"
+            })
+        }
+
+        const data = {
+                user: {
+                    id: user.id
+                }
+            }
+
+            const authtoken = jwt.sign(data, JWT_SECRET);
+            console.log(authtoken);
+
+            return res.json({ authtoken });
+
+        }catch (error) {
+            console.log(error.message);
+            res.send(500).send("Internal server error");
+        }
+
+    })
 
 module.exports = router;

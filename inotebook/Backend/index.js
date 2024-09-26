@@ -17,5 +17,5 @@ app.use('/api/notes', notes);
 console.log("Routes set up");
 
 app.listen(port, ()=>{
-    console.log("Server Started at port no : "+ port);
+    console.log(`INotebook Backend listening at http://localhost:${port}`);
 })

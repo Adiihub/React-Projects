@@ -1,30 +1,53 @@
-import React, { useState, useEffect} from "react";
-import NoteContext from "./NoteContext";
+import React, { useState } from "react";
+import NoteContext from "./NoteContext"; // Import NoteContext here
 
 const NoteState = (props) => {
-    const s1 = {
-        "name": "Aditi",
-        "class": "7B"
-    };
+    const notesInitial = [
+        {
+          "_id": "66f475359cdca3f0145de27b",
+          "user": "66f451f9fd38d3fac2f1a7b8",
+          "title": "my title updated",
+          "description": "please wake up early updated",
+          "tag": "Personal",
+          "timestamp": "2024-09-25T20:40:21.649Z",
+          "__v": 0
+        },
+        {
+          "_id": "66f475c79cdca3f0145de27e",
+          "user": "66f451f9fd38d3fac2f1a7b8",
+          "title": "my title",
+          "description": "please wake up early",
+          "tag": "Personal",
+          "timestamp": "2024-09-25T20:42:47.891Z",
+          "__v": 0
+        },
+        {
+          "_id": "66f47c3f5327f9efecdc9c51",
+          "user": "66f451f9fd38d3fac2f1a7b8",
+          "title": "Market",
+          "description": "Go to Market & buy mango",
+          "tag": "Personal",
+          "timestamp": "2024-09-25T21:10:23.125Z",
+          "__v": 0
+        },
+        {
+          "_id": "66f47e5f5327f9efecdc9c58",
+          "user": "66f451f9fd38d3fac2f1a7b8",
+          "title": "Food",
+          "description": "Buy Pizza",
+          "tag": "Personal",
+          "timestamp": "2024-09-25T21:19:27.317Z",
+          "__v": 0
+        }
+      ]
+      
+      const [notes, setnotes] = useState(notesInitial);
 
-    // ak method bnaungi jo state ko update kregi
-    const [state, setstate] = useState(s1);
-
-    const update = () => {
-        setTimeout(() => {
-            setstate({
-                "name": "Kajal",
-                "class": "5A"
-            }, 1000)
-        })
-    }
-
-    return (             // ak obj banaya jisme obj ki value obj and update ki update
-        <NoteContext.Provider value={{state: state, update: update}}>
-        {/*  can write in this way also     {{state, update}}> */}
+    return (             
+        <NoteContext.Provider value={{notes, setnotes}}>
             {props.children}
         </NoteContext.Provider>
-    )
+    );
 }
 
 export default NoteState;
